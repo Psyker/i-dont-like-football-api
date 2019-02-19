@@ -2,19 +2,23 @@
 
 namespace App\Controller;
 
+use App\Repository\SportsDBRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TeamController extends AbstractController
 {
     /**
-     * @Route("/team", name="team")
+     * @Route("/leagues/{name}/teams", name="app_list_league_teams")
+     * @param SportsDBRepository $sportsDBRepository
+     * @param string $name
+     * @return JsonResponse
      */
-    public function index()
+    public function listLeagueTeams(SportsDBRepository $sportsDBRepository, string $name): JsonResponse
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/TeamController.php',
-        ]);
+        $teams = $sportsDBRepository->getTeamsByLeague($name);
+
+        return $this->json($teams);
     }
 }

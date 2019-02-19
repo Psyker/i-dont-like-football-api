@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\SportsDBRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LeagueController extends AbstractController
@@ -13,7 +14,7 @@ class LeagueController extends AbstractController
      * @param SportsDBRepository $sportsDBRepository
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function listLeagues(SportsDBRepository $sportsDBRepository)
+    public function listLeagues(SportsDBRepository $sportsDBRepository): JsonResponse
     {
         $leagues = $sportsDBRepository->getAllLeagues();
 

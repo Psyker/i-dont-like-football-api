@@ -25,8 +25,11 @@ class SportsDBRepository
      */
     private $logger;
 
+    // I choose to not create models to map data because of the context of a simple wrapper
+
     public function __construct(LoggerInterface $logger)
     {
+        // Creating the GuzzleHttp Client with env params.
         $this->client = new Client();
         $this->endpoint = getenv('API_HOST') . getenv('API_KEY');
         $this->logger = $logger;
@@ -37,6 +40,7 @@ class SportsDBRepository
      */
     public function getAllLeagues(): array
     {
+        // Log the exception.
         try {
             $response = $this->client->request('GET', $this->endpoint.'/all_leagues.php');
         } catch (GuzzleException $e) {
@@ -44,7 +48,7 @@ class SportsDBRepository
             return [];
         }
 
-        return json_decode($response->getBody()->getContents(), true)['leagues'];
+        return json_decode($response->getBody()->getContents(), true)['leagues'] ?? [];
     }
 
     /**
@@ -54,6 +58,7 @@ class SportsDBRepository
     public function getTeamsByLeague(string $league): array
     {
         // https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php
+        // Log exception
         try {
             $response = $this->client->request('GET', $this->endpoint. "/search_all_teams.php?l=$league");
         } catch (GuzzleException $e) {
@@ -61,7 +66,7 @@ class SportsDBRepository
             return [];
         }
 
-        return json_decode($response->getBody()->getContents(), true)['teams'];
+        return json_decode($response->getBody()->getContents(), true)['teams'] ?? [];
     }
 
     /**
@@ -71,6 +76,7 @@ class SportsDBRepository
     public function getPlayersByTeam(int $id): array
     {
         // https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=133604
+        // Log exception
         try {
             $response = $this->client->request('GET', $this->endpoint. "/lookup_all_players.php?id=$id");
         } catch (GuzzleException $e) {
@@ -78,6 +84,6 @@ class SportsDBRepository
             return [];
         }
 
-        return json_decode($response->getBody()->getContents(), true)['player'];
+        return json_decode($response->getBody()->getContents(), true)['player'] ?? [];
     }
 }
